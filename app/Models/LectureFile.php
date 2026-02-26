@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LectureFile extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'lecture_id',

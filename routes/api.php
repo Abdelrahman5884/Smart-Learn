@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\Auth\VerifyOtpController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Course\CourseController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -40,4 +41,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update', [UserController::class, 'update']);
         Route::put('/change-password', [UserController::class, 'changePassword']);
         Route::delete('/delete-account', [UserController::class, 'deleteAccount']);
+});
+
+
+// Public Routes
+Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses/{course}', [CourseController::class, 'show']);
+
+// Protected Routes (Instructor Only)
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/courses', [CourseController::class, 'store']);
+    Route::put('/courses/{course}', [CourseController::class, 'update']);
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
+    Route::get('/my-courses', [CourseController::class, 'myCourses']);
+
 });

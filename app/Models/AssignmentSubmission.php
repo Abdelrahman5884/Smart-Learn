@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssignmentSubmission extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'assignment_id',

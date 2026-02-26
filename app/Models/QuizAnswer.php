@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuizAnswer extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'attempt_id',

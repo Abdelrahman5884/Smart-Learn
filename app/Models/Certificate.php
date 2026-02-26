@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Certificate extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'course_id',
