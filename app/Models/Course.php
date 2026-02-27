@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CourseLectures;
 
 class Course extends Model
 {
@@ -26,15 +27,10 @@ class Course extends Model
         return $this->belongsToMany(User::class, 'course_student', 'course_id', 'student_id');
     }
 
-    public function sections()
-    {
-        return $this->hasMany(Section::class);
-    }
-
-    public function lectures()
-    {
-        return $this->hasMany(Lecture::class);
-    }
+   public function lectures()
+   {
+       return $this->hasMany(CourseLectures::class);
+   }
 
     public function assignments()
     {

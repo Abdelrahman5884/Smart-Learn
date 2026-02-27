@@ -10,6 +10,9 @@ use App\Http\Controllers\Auth\VerifyOtpController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Instructor\LectureController;
+use App\Http\Controllers\Instructor\AssignmentController;
+use App\Http\Controllers\Instructor\CourseCertificateController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -56,4 +59,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
     Route::get('/my-courses', [CourseController::class, 'myCourses']);
 
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/courses/{course}/lectures',[LectureController::class, 'store']);
+    Route::post('/lectures/{lecture}/video',[LectureController::class,'uploadVideo']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/lectures/{lecture}/assignments',[AssignmentController::class,'store']);
+
+});
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::post('/courses/{course}/certificate',[CourseCertificateController::class,'store']);
 });

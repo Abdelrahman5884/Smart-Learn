@@ -6,22 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Assignment extends Model
 {
-
     protected $fillable = [
-        'course_id',
+        'lecture_id',
         'title',
         'description',
+        'max_grade',
         'due_date',
-        'total_grade'
+        'attachment',
+        'status'
     ];
 
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
+    protected $casts = [
+        'due_date' => 'date'
+    ];
 
-    public function submissions()
+    public function lecture()
     {
-        return $this->hasMany(AssignmentSubmission::class);
+        return $this->belongsTo(CourseLectures::class);
     }
 }
