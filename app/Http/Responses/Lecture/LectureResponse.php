@@ -9,7 +9,7 @@ class LectureResponse
         return response()->json([
             'success' => true,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ], $code);
     }
 
@@ -17,7 +17,7 @@ class LectureResponse
     {
         return response()->json([
             'success' => false,
-            'message' => $message
+            'message' => $message,
         ], $code);
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Instructor;
 
-use App\Models\Course;
-use App\Models\CourseCertificate;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instructor\StoreCertificateRequest;
 use App\Http\Responses\Certificate\CertificateResponse;
+use App\Models\Course;
+use App\Models\CourseCertificate;
 
 class CourseCertificateController extends Controller
 {
@@ -15,8 +14,8 @@ class CourseCertificateController extends Controller
     {
         $course = Course::find($courseId);
 
-        if (!$course || $course->instructor_id !== $request->user()->id) {
-            return CertificateResponse::error('Unauthorized.',403);
+        if (! $course || $course->instructor_id !== $request->user()->id) {
+            return CertificateResponse::error('Unauthorized.', 403);
         }
 
         $data = $request->validated();
@@ -25,7 +24,7 @@ class CourseCertificateController extends Controller
 
             $data['template'] = $request
                 ->file('template')
-                ->store('certificates','public');
+                ->store('certificates', 'public');
         }
 
         $data['course_id'] = $course->id;

@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Certificate extends Model
 {
-
     protected $fillable = [
         'course_id',
         'student_id',
         'certificate_file',
-        'issued_at'
+        'issued_at',
     ];
 
     public function course()

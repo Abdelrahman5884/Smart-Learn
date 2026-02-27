@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quiz extends Model
 {
-
     protected $fillable = [
         'course_id',
         'title',
-        'total_grade',
         'duration_minutes',
-        'attempts_allowed',
-        'start_date',
-        'end_date',
-        'show_result_immediately',
-        'shuffle_questions'
+        'attempts',
+        'show_results',
+        'randomize_questions',
+        'status',
+    ];
+
+    protected $casts = [
+        'show_results' => 'boolean',
+        'randomize_questions' => 'boolean',
     ];
 
     public function course()
@@ -27,10 +29,5 @@ class Quiz extends Model
     public function questions()
     {
         return $this->hasMany(QuizQuestion::class);
-    }
-
-    public function attempts()
-    {
-        return $this->hasMany(QuizAttempt::class);
     }
 }

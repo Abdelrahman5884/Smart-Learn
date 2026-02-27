@@ -22,16 +22,17 @@ class UploadLectureVideoRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'video_url' => ['nullable','url'],
-        'video_file' => ['nullable','file','mimes:mp4,mov,mkv','max:204800'],
-        'video_duration' => ['nullable','integer','min:1']        
+            'video_url' => ['nullable', 'url'],
+            'video_file' => ['nullable', 'file', 'mimes:mp4,mov,mkv', 'max:204800'],
+            'video_duration' => ['nullable', 'integer', 'min:1'],
         ];
     }
+
     public function messages(): array
-{
-    return [
-        'video_file.mimes' => 'Video must be mp4, mov or mkv.',
-        'video_file.max' => 'Video must not exceed 200MB.'
-    ];
-}
+    {
+        return [
+            'video_file.mimes' => 'Video must be mp4, mov or mkv.',
+            'video_file.max' => 'Video must not exceed 200MB.',
+        ];
+    }
 }

@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-   
     protected $fillable = [
         'conversation_id',
         'sender_type',
         'message',
-        'attachment_path'
+        'attachment_path',
     ];
 
     public function conversation()

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('course_certificates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
-            $table->string('template'); 
+            $table->string('template');
             $table->boolean('enabled')->default(true);
             $table->boolean('auto_send')->default(false);
             $table->boolean('has_qr')->default(false);

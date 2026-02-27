@@ -13,11 +13,11 @@ class Assignment extends Model
         'max_grade',
         'due_date',
         'attachment',
-        'status'
+        'status',
     ];
 
     protected $casts = [
-        'due_date' => 'date'
+        'due_date' => 'date',
     ];
 
     public function lecture()

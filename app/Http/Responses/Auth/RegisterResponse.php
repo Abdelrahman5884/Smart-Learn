@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Responsable;
 class RegisterResponse implements Responsable
 {
     protected $user;
+
     protected $token;
 
     public function __construct($user, $token)
@@ -22,8 +23,8 @@ class RegisterResponse implements Responsable
             'message' => 'Registered successfully',
             'data' => [
                 'user' => $this->user,
-                'token' => $this->token
-            ]
+                'token' => $this->token,
+            ],
         ], 201);
     }
 }

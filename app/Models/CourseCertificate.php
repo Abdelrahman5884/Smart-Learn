@@ -11,13 +11,13 @@ class CourseCertificate extends Model
         'template',
         'enabled',
         'auto_send',
-        'has_qr'
+        'has_qr',
     ];
 
     protected $casts = [
         'enabled' => 'boolean',
         'auto_send' => 'boolean',
-        'has_qr' => 'boolean'
+        'has_qr' => 'boolean',
     ];
 
     public function course()

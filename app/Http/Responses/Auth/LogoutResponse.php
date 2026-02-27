@@ -10,7 +10,7 @@ class LogoutResponse implements Responsable
     {
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ], 200);
     }
 }

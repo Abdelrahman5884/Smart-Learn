@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Course;
 
-use App\Models\Course;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\StoreCourseRequest;
 use App\Http\Requests\Course\UpdateCourseRequest;
 use App\Http\Responses\Course\CourseResponse;
+use App\Models\Course;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    // Create 
+    // Create
     public function store(StoreCourseRequest $request)
     {
         $data = $request->validated();
@@ -26,13 +26,13 @@ class CourseController extends Controller
         );
     }
 
-    // Update 
+    // Update
     public function update(UpdateCourseRequest $request, Course $course)
     {
         if ($course->instructor_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized to edit this course.'
+                'message' => 'Unauthorized to edit this course.',
             ], 403);
         }
 
@@ -44,20 +44,20 @@ class CourseController extends Controller
         );
     }
 
-    //  Delete 
+    //  Delete
     public function destroy(Request $request, Course $course)
     {
-         if (!$course) {
-             return response()->json([
-               'success' => false,
-               'message' => 'Course not found.'
-           ], 404);
-       
-           }
+        if (! $course) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Course not found.',
+            ], 404);
+
+        }
         if ($course->instructor_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized.'
+                'message' => 'Unauthorized.',
             ], 403);
         }
 
@@ -65,11 +65,11 @@ class CourseController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Course deleted successfully.'
+            'message' => 'Course deleted successfully.',
         ]);
     }
 
-    //  My Courses 
+    //  My Courses
     public function myCourses(Request $request)
     {
         $courses = Course::where('instructor_id', $request->user()->id)->get();
@@ -77,15 +77,15 @@ class CourseController extends Controller
         return new CourseResponse($courses);
     }
 
-    //  Public Courses 
+    //  Public Courses
     public function index()
     {
-        $courses = Course::where('status','active')->get();
+        $courses = Course::where('status', 'active')->get();
 
         return new CourseResponse($courses);
     }
 
-    //  Show Course 
+    //  Show Course
     public function show(Course $course)
     {
         return new CourseResponse($course);

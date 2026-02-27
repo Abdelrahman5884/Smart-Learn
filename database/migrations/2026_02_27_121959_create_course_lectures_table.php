@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->longText('content')->nullable(); 
-            $table->string('attachment')->nullable(); 
+            $table->longText('content')->nullable();
+            $table->string('attachment')->nullable();
             $table->integer('order')->default(1);
             $table->timestamps();
         });

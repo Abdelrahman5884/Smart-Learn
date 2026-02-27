@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\PasswordOtp;
 use App\Models\user;
-use App\Http\Requests\Auth\ResetPasswordRequest;
+use Illuminate\Support\Facades\Hash;
+
 class ResetPasswordController extends Controller
 {
     public function reset(ResetPasswordRequest $request)
@@ -16,7 +16,7 @@ class ResetPasswordController extends Controller
             ->where('otp', $request->otp)
             ->first();
 
-        if (!$record || now()->gt($record->expires_at)) {
+        if (! $record || now()->gt($record->expires_at)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid or expired OTP.',

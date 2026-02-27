@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Instructor;
 
-use App\Models\Course;
-use App\Models\CourseLectures;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instructor\StoreLectureRequest;
 use App\Http\Requests\Instructor\UploadLectureVideoRequest;
 use App\Http\Responses\Lecture\LectureResponse;
+use App\Models\Course;
+use App\Models\CourseLectures;
+use Illuminate\Support\Facades\Storage;
 
 class LectureController extends Controller
 {
@@ -16,7 +16,7 @@ class LectureController extends Controller
     {
         $course = Course::find($courseId);
 
-        if (!$course || $course->instructor_id !== $request->user()->id) {
+        if (! $course || $course->instructor_id !== $request->user()->id) {
             return LectureResponse::error('Unauthorized.', 403);
         }
 
@@ -28,7 +28,7 @@ class LectureController extends Controller
         if ($request->hasFile('attachment')) {
             $data['attachment'] = $request
                 ->file('attachment')
-                ->store('lectures','public');
+                ->store('lectures', 'public');
         }
 
         $data['order'] = $newOrder;
@@ -41,40 +41,41 @@ class LectureController extends Controller
             201
         );
     }
+
     public function uploadVideo(UploadLectureVideoRequest $request, $lectureId)
-{
-    $lecture = CourseLectures::find($lectureId);
+    {
+        $lecture = CourseLectures::find($lectureId);
 
-    if (!$lecture || $lecture->course->instructor_id !== $request->user()->id) {
-        return LectureResponse::error('Unauthorized.', 403);
-    }
-
-    $data = [];
-
-    if ($request->hasFile('video_file')) {
-
-        if ($lecture->video_path) {
-            Storage::disk('public')->delete($lecture->video_path);
+        if (! $lecture || $lecture->course->instructor_id !== $request->user()->id) {
+            return LectureResponse::error('Unauthorized.', 403);
         }
 
-        $data['video_path'] = $request
-            ->file('video_file')
-            ->store('lecture_videos','public');
+        $data = [];
+
+        if ($request->hasFile('video_file')) {
+
+            if ($lecture->video_path) {
+                Storage::disk('public')->delete($lecture->video_path);
+            }
+
+            $data['video_path'] = $request
+                ->file('video_file')
+                ->store('lecture_videos', 'public');
+        }
+
+        if ($request->video_url) {
+            $data['video_url'] = $request->video_url;
+        }
+
+        if ($request->video_duration) {
+            $data['video_duration'] = $request->video_duration;
+        }
+
+        $lecture->update($data);
+
+        return LectureResponse::success(
+            $lecture,
+            'Video uploaded successfully.'
+        );
     }
-
-    if ($request->video_url) {
-        $data['video_url'] = $request->video_url;
-    }
-
-    if ($request->video_duration) {
-        $data['video_duration'] = $request->video_duration;
-    }
-
-    $lecture->update($data);
-
-    return LectureResponse::success(
-        $lecture,
-        'Video uploaded successfully.'
-    );
-}
 }

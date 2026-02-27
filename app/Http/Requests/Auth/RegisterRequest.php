@@ -18,7 +18,7 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6', 'max:50'],
             'role' => ['required', 'in:student,instructor'],
-            'university_id' => ['required', 'string', 'min:6', 'max:12','unique:users,university_id'],
+            'university_id' => ['required', 'string', 'min:6', 'max:12', 'unique:users,university_id'],
         ];
     }
 

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('max_grade')->default(100);
             $table->date('due_date');
             $table->string('attachment')->nullable();
-            $table->enum('status', ['draft','published'])->default('draft');
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamps();
         });
     }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseLectures extends Model
 {
-   
     protected $fillable = [
         'course_id',
         'title',
@@ -16,12 +15,11 @@ class CourseLectures extends Model
         'video_url',
         'video_path',
         'video_duration',
-        'order'
+        'order',
     ];
 
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
-
 }

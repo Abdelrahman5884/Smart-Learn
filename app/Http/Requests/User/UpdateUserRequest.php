@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Requests\User;
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -13,38 +13,39 @@ class UpdateUserRequest extends FormRequest
     }
 
     public function rules(): array
-{
-    return [
-        'name' => ['sometimes','string','min:3','max:100'],
+    {
+        return [
+            'name' => ['sometimes', 'string', 'min:3', 'max:100'],
 
-        'email' => [
-            'sometimes',
-            'email',
-            Rule::unique('users','email')->ignore($this->user()->id),
-        ],
+            'email' => [
+                'sometimes',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user()->id),
+            ],
 
-        'phone' => [
-            'sometimes',
-            'regex:/^01[0-9]{9}$/',
-            Rule::unique('users','phone')->ignore($this->user()->id),
-        ],
+            'phone' => [
+                'sometimes',
+                'regex:/^01[0-9]{9}$/',
+                Rule::unique('users', 'phone')->ignore($this->user()->id),
+            ],
 
-        'university_id' => [
-            'sometimes',
-            'string',
-            'min:6',
-            'max:20',
-            Rule::unique('users','university_id')->ignore($this->user()->id),
-        ],
+            'university_id' => [
+                'sometimes',
+                'string',
+                'min:6',
+                'max:20',
+                Rule::unique('users', 'university_id')->ignore($this->user()->id),
+            ],
 
-        'profile_image' => [
-            'sometimes',
-            'image',
-            'mimes:jpg,jpeg,png',
-            'max:2048'
-        ],
-    ];
-}
+            'profile_image' => [
+                'sometimes',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+        ];
+    }
+
     public function messages(): array
     {
         return [

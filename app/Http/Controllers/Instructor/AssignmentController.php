@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Instructor;
 
-use App\Models\Assignment;
-use App\Models\CourseLectures;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instructor\StoreAssignmentRequest;
 use App\Http\Responses\Assignment\AssignmentResponse;
+use App\Models\Assignment;
+use App\Models\CourseLectures;
 
 class AssignmentController extends Controller
 {
@@ -15,8 +14,8 @@ class AssignmentController extends Controller
     {
         $lecture = CourseLectures::find($lectureId);
 
-        if (!$lecture || $lecture->course->instructor_id !== $request->user()->id) {
-            return AssignmentResponse::error('Unauthorized.',403);
+        if (! $lecture || $lecture->course->instructor_id !== $request->user()->id) {
+            return AssignmentResponse::error('Unauthorized.', 403);
         }
 
         $data = $request->validated();
@@ -25,7 +24,7 @@ class AssignmentController extends Controller
 
             $data['attachment'] = $request
                 ->file('attachment')
-                ->store('assignments','public');
+                ->store('assignments', 'public');
         }
 
         $data['lecture_id'] = $lecture->id;

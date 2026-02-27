@@ -7,7 +7,9 @@ use Illuminate\Contracts\Support\Responsable;
 class CourseResponse implements Responsable
 {
     protected $data;
+
     protected $message;
+
     protected $status;
 
     public function __construct($data, $message = null, $status = 200)
@@ -22,7 +24,7 @@ class CourseResponse implements Responsable
         return response()->json([
             'success' => true,
             'message' => $this->message,
-            'data' => $this->data
+            'data' => $this->data,
         ], $this->status);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-use App\Http\Requests\Auth\VerifyOtpRequest;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\VerifyOtpRequest;
 use App\Models\PasswordOtp;
 
 class VerifyOtpController extends Controller
@@ -14,7 +14,7 @@ class VerifyOtpController extends Controller
             ->where('otp', $request->otp)
             ->first();
 
-        if (!$record || now()->gt($record->expires_at)) {
+        if (! $record || now()->gt($record->expires_at)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid or expired OTP.',

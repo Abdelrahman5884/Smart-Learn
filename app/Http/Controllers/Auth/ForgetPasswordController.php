@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\Auth\ForgetPasswordRequest;use App\Models\User;
-use App\Models\PasswordOtp;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\Auth\ForgetPasswordRequest;
 use App\Mail\SendOtpMail;
+use App\Models\PasswordOtp;
+use Illuminate\Support\Facades\Mail;
 
 class ForgetPasswordController extends Controller
 {
@@ -24,7 +22,7 @@ class ForgetPasswordController extends Controller
             ]
         );
 
-      Mail::to($request->email)->send(new SendOtpMail($otp));
+        Mail::to($request->email)->send(new SendOtpMail($otp));
 
         return response()->json([
             'success' => true,

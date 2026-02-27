@@ -23,17 +23,17 @@ class UpdateCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes','string','min:3','max:255'],
+            'title' => ['sometimes', 'string', 'min:3', 'max:255'],
             'code' => [
                 'sometimes',
                 'string',
                 'min:3',
                 'max:50',
-                Rule::unique('courses','code')->ignore($this->course)
+                Rule::unique('courses', 'code')->ignore($this->course),
             ],
-            'description' => ['sometimes','nullable','string','min:10'],
-            'level' => ['sometimes','nullable','string','max:100'],
-            'status' => ['sometimes', Rule::in(['active','archived','draft'])],
+            'description' => ['sometimes', 'nullable', 'string', 'min:10'],
+            'level' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'status' => ['sometimes', Rule::in(['active', 'archived', 'draft'])],
         ];
     }
 }

@@ -22,14 +22,15 @@ class StoreAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required','string','min:3','max:255'],
-            'description' => ['required','string'],
-            'max_grade' => ['required','integer','min:1','max:1000'],
-            'due_date' => ['required','date','after:today'],
-            'attachment' => ['nullable','file','mimes:pdf,doc,docx,zip','max:25600'],
-            'status' => ['nullable','in:draft,published']
+            'title' => ['required', 'string', 'min:3', 'max:255'],
+            'description' => ['required', 'string'],
+            'max_grade' => ['required', 'integer', 'min:1', 'max:1000'],
+            'due_date' => ['required', 'date', 'after:today'],
+            'attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:25600'],
+            'status' => ['nullable', 'in:draft,published'],
         ];
     }
+
     public function messages(): array
     {
         return [
@@ -37,7 +38,7 @@ class StoreAssignmentRequest extends FormRequest
             'description.required' => 'Assignment description is required.',
             'due_date.after' => 'Due date must be in the future.',
             'attachment.mimes' => 'File must be PDF, DOC, DOCX or ZIP.',
-            'attachment.max' => 'File size must not exceed 25MB.'
+            'attachment.max' => 'File size must not exceed 25MB.',
         ];
     }
 }

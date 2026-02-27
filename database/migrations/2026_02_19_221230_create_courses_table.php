@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
     }
 
     /**
