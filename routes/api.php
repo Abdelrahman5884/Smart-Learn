@@ -14,6 +14,8 @@ use App\Http\Controllers\Instructor\QuizController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Student\StudentCourseController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -79,4 +81,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/courses/{course}/quizzes', [QuizController::class, 'store']);
     Route::post('/quizzes/{quiz}/questions', [QuizController::class, 'addQuestion']);
     Route::post('/quizzes/{quiz}/publish', [QuizController::class, 'publish']);
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/student/courses',[StudentCourseController::class, 'index']);
+    Route::post('/student/courses/{course}/enroll',[StudentCourseController::class, 'enroll']);
+    Route::get('/student/my-courses',[StudentCourseController::class, 'myCourses']);
+    Route::get('/student/courses/{course}',[StudentCourseController::class, 'show']);
 });

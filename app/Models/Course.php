@@ -22,7 +22,7 @@ class Course extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'course_student', 'course_id', 'student_id');
+    return $this->belongsToMany(User::class)->withPivot(['status','enrolled_at'])->withTimestamps();
     }
 
     public function lectures()
