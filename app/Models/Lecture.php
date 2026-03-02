@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lecture extends Model
 {
+    protected $table = 'course_lectures';
     protected $fillable = [
         'course_id',
         'section_id',
@@ -21,9 +22,10 @@ class Lecture extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function section()
+    public function students()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsToMany(User::class)
+        ->withPivot(['is_completed','completed_at'])->withTimestamps();
     }
 
     public function files()
