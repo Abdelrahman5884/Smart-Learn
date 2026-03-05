@@ -6,22 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('lecture_user', function (Blueprint $table) {
-
+        Schema::create('lecture_notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lecture_id')->constrained('course_lectures')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->boolean('is_completed')->default(false);
-            $table->timestamp('completed_at')->nullable();
+            $table->text('content');
+            $table->integer('timestamp_seconds')->nullable();
             $table->timestamps();
-            $table->unique(['lecture_id', 'user_id']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('lecture_user');
+        Schema::dropIfExists('lecture_notes');
     }
 };

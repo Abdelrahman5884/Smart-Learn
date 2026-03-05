@@ -8,14 +8,15 @@ class EnrollCourseRequest extends FormRequest
 {
     public function authorize(): bool
     {
-      $user = $this->user();
+        $user = $this->user();
+
         return $user && $user->role === 'student';
     }
 
     public function rules(): array
     {
         return [
-            'course_id' => ['required','integer','exists:courses,id']
+            'course_id' => ['required', 'integer', 'exists:courses,id'],
         ];
     }
 
@@ -23,7 +24,7 @@ class EnrollCourseRequest extends FormRequest
     {
         return [
             'course_id.required' => 'Course id is required.',
-            'course_id.exists' => 'Selected course does not exist.'
+            'course_id.exists' => 'Selected course does not exist.',
         ];
     }
 }

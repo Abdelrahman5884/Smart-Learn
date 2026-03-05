@@ -7,16 +7,17 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateEnrollmentStatusRequest extends FormRequest
 {
     public function authorize(): bool
-    {     
+    {
         $user = $this->user();
+
         return $user && $user->role === 'instructor';
-        
+
     }
 
     public function rules(): array
     {
         return [
-            'status' => 'required|in:approved,rejected'
+            'status' => 'required|in:approved,rejected',
         ];
     }
 
@@ -24,7 +25,7 @@ class UpdateEnrollmentStatusRequest extends FormRequest
     {
         return [
             'status.required' => 'Status is required.',
-            'status.in' => 'Status must be either approved or rejected.'
+            'status.in' => 'Status must be either approved or rejected.',
         ];
     }
 }

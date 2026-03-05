@@ -22,4 +22,21 @@ class CourseLectures extends Model
     {
         return $this->belongsTo(Course::class);
     }
+    public function students()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'lecture_user',
+            'lecture_id',
+            'user_id'
+        )->withPivot([
+            'is_completed',
+            'completed_at'
+        ])->withTimestamps();
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(LectureNote::class,'lecture_id');
+    }
 }

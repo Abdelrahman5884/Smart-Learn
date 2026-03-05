@@ -52,14 +52,14 @@ class LectureController extends Controller
 
         $data = [];
 
-        if ($request->hasFile('video_file')) {
+        if ($request->hasFile('video_path')) {
 
             if ($lecture->video_path) {
                 Storage::disk('public')->delete($lecture->video_path);
             }
 
             $data['video_path'] = $request
-                ->file('video_file')
+                ->file('video_path')
                 ->store('lecture_videos', 'public');
         }
 
@@ -72,7 +72,6 @@ class LectureController extends Controller
         }
 
         $lecture->update($data);
-
         return LectureResponse::success(
             $lecture,
             'Video uploaded successfully.'

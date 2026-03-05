@@ -56,42 +56,31 @@ class User extends Authenticatable
     {
         return $this->hasMany(Course::class, 'instructor_id');
     }
-
     // Student Enrollments
     public function enrolledCourses()
     {
-        return $this->belongsToMany(Course::class)->withPivot(['status','enrolled_at'])->withTimestamps();
-     }
-
-    public function assignmentSubmissions()
-    {
-        return $this->hasMany(AssignmentSubmission::class, 'student_id');
-    }
-
-    public function certificates()
-    {
-        return $this->hasMany(Certificate::class, 'student_id');
+        return $this->belongsToMany(Course::class)->withPivot(['status', 'enrolled_at'])->withTimestamps();
     }
 
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
     }
-
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
-
-    // Chat
-    public function conversations()
-    {
-        return $this->hasMany(Conversation::class);
-    }
+       public function lectures()
+   {
+    return $this->hasMany(CourseLectures::class);
+   }
     public function completedLectures()
     {
-        return $this->belongsToMany(Lecture::class)
-        ->withPivot(['is_completed','completed_at'])->withTimestamps();
+        return $this->belongsToMany(
+            CourseLectures::class,
+            'lecture_user',
+            'user_id',
+            'lecture_id'
+        )->withPivot(
+            'is_completed',
+            'completed_at'
+        )->withTimestamps();
     }
 
 }

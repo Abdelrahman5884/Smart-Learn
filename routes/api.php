@@ -9,15 +9,14 @@ use App\Http\Controllers\Auth\VerifyOtpController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Instructor\AssignmentController;
 use App\Http\Controllers\Instructor\CourseCertificateController;
+use App\Http\Controllers\Instructor\InstructorStudentController;
 use App\Http\Controllers\Instructor\LectureController;
 use App\Http\Controllers\Instructor\QuizController;
+use App\Http\Controllers\Student\StudentCourseController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Student\StudentLectureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Student\StudentCourseController;
-use App\Http\Controllers\Instructor\InstructorStudentController;
-
-
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -85,19 +84,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/quizzes/{quiz}/publish', [QuizController::class, 'publish']);
 });
 
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/student/courses', [StudentCourseController::class, 'index']);
+    Route::post('/student/courses/{course}/enroll', [StudentCourseController::class, 'enroll']);
+    Route::get('/student/my-courses', [StudentCourseController::class, 'myCourses']);
+    Route::get('/student/courses/{course}', [StudentCourseController::class, 'show']);
+});
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    Route::get('/student/courses',[StudentCourseController::class, 'index']);
-    Route::post('/student/courses/{course}/enroll',[StudentCourseController::class, 'enroll']);
-    Route::get('/student/my-courses',[StudentCourseController::class, 'myCourses']);
-    Route::get('/student/courses/{course}',[StudentCourseController::class, 'show']);
+    Route::get('/instructor/courses/{course}/students', [InstructorStudentController::class, 'index']);
+    Route::patch('/courses/{course}/students/{student}/status', [InstructorStudentController::class, 'updateEnrollmentStatus']);
+
 });
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
-
-    Route::get('/instructor/courses/{course}/students',[InstructorStudentController::class, 'index']);
-    Route::patch('/courses/{course}/students/{student}/status',[InstructorStudentController::class, 'updateEnrollmentStatus']);
-
+Route::middleware('auth:sanctum')->group(function(){
+    
+Route::get('/student/courses/{course}/lectures/{lecture}',[StudentLectureController::class,'show']);
+Route::post('/student/lectures/{lecture}/notes',[StudentLectureController::class,'storeNote']);
 });

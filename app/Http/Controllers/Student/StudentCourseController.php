@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Models\Course;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class StudentCourseController extends Controller
 {
-  
     public function index(): JsonResponse
     {
         $courses = Course::where('status', 'active')->get();
 
         return response()->json([
             'success' => true,
-            'data' => $courses
+            'data' => $courses,
         ]);
     }
 
@@ -27,14 +26,14 @@ class StudentCourseController extends Controller
         if ($course->status !== 'active') {
             return response()->json([
                 'success' => false,
-                'message' => 'Course is not available.'
+                'message' => 'Course is not available.',
             ], 400);
         }
 
         if ($user->role !== 'student') {
             return response()->json([
                 'success' => false,
-                'message' => 'Only students can enroll.'
+                'message' => 'Only students can enroll.',
             ], 403);
         }
 
@@ -44,20 +43,19 @@ class StudentCourseController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'You already enrolled or requested this course.'
+                'message' => 'You already enrolled or requested this course.',
             ], 400);
         }
 
         $user->enrolledCourses()->attach($course->id, [
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Enrollment request sent successfully.'
+            'message' => 'Enrollment request sent successfully.',
         ]);
     }
-
 
     public function myCourses(Request $request): JsonResponse
     {
@@ -69,10 +67,9 @@ class StudentCourseController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $courses
+            'data' => $courses,
         ]);
     }
-
 
     public function show(Request $request, Course $course): JsonResponse
     {
@@ -83,16 +80,16 @@ class StudentCourseController extends Controller
             ->wherePivot('status', 'approved')
             ->exists();
 
-        if (!$isApproved) {
+        if (! $isApproved) {
             return response()->json([
                 'success' => false,
-                'message' => 'You are not allowed to access this course.'
+                'message' => 'You are not allowed to access this course.',
             ], 403);
         }
 
         return response()->json([
             'success' => true,
-            'data' => $course
+            'data' => $course,
         ]);
     }
 }

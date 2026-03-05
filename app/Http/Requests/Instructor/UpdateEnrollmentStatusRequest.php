@@ -9,13 +9,14 @@ class UpdateEnrollmentStatusRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->user();
+
         return $user && $user->role === 'instructor';
     }
 
     public function rules(): array
     {
         return [
-            'status' => 'required|in:approved,rejected'
+            'status' => 'required|in:approved,rejected',
         ];
     }
 }

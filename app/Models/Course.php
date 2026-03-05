@@ -22,18 +22,18 @@ class Course extends Model
 
     public function students()
     {
-    return $this->belongsToMany(User::class)->withPivot(['status','enrolled_at'])->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot(['status', 'enrolled_at'])->withTimestamps();
     }
 
     public function CourseLectures()
     {
         return $this->hasMany(CourseLectures::class);
     }
-    public function lectures()
-    {
-    return $this->hasMany(Lecture::class);
-    }
 
+    public function lectures()
+   {
+    return $this->hasMany(CourseLectures::class);
+   }
     public function assignments()
     {
         return $this->hasMany(Assignment::class);

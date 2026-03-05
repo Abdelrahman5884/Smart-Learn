@@ -16,11 +16,11 @@ return new class extends Migration
             $table->enum('status', [
                 'pending',
                 'approved',
-                'rejected'
+                'rejected',
             ])->default('pending');
             $table->timestamp('enrolled_at')->nullable();
             $table->timestamps();
-            $table->unique(['course_id','user_id']);
+            $table->unique(['course_id', 'user_id']);
         });
     }
 
