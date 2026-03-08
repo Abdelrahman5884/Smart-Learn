@@ -13,6 +13,7 @@ use App\Http\Controllers\Instructor\InstructorStudentController;
 use App\Http\Controllers\Instructor\LectureController;
 use App\Http\Controllers\Instructor\QuizController;
 use App\Http\Controllers\Student\StudentCourseController;
+use App\Http\Controllers\Student\StudentQuizController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Student\StudentLectureController;
 use Illuminate\Http\Request;
@@ -104,4 +105,12 @@ Route::middleware('auth:sanctum')->group(function(){
     
 Route::get('/student/courses/{course}/lectures/{lecture}',[StudentLectureController::class,'show']);
 Route::post('/student/lectures/{lecture}/notes',[StudentLectureController::class,'storeNote']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/quiz/{quizId}', [StudentQuizController::class, 'show']);
+    Route::post('/quiz/{quizId}/start', [StudentQuizController::class, 'start']);
+    Route::post('/quiz/attempt/{attemptId}/submit', [StudentQuizController::class, 'submit']);
 });
