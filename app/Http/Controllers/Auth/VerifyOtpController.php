@@ -21,6 +21,10 @@ class VerifyOtpController extends Controller
             ], 400);
         }
 
+        $record->update([
+            'verified' => true
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => 'OTP verified successfully.',

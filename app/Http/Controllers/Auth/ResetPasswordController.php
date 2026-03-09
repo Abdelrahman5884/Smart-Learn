@@ -5,25 +5,34 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\PasswordOtp;
-use App\Models\user;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
     public function reset(ResetPasswordRequest $request)
     {
+
         $record = PasswordOtp::where('email', $request->email)
-            ->where('otp', $request->otp)
+            ->where('verified', true)
             ->first();
 
-        if (! $record || now()->gt($record->expires_at)) {
+        if (!$record) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid or expired OTP.',
-            ], 400);
+                'message' => 'OTP not verified.',
+            ], 403);
         }
 
         $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
         $user->update([
             'password' => Hash::make($request->password),
         ]);

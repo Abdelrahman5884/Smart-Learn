@@ -29,16 +29,8 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique('users', 'phone')->ignore($this->user()->id),
             ],
 
-            'university_id' => [
-                'sometimes',
-                'string',
-                'min:6',
-                'max:20',
-                Rule::unique('users', 'university_id')->ignore($this->user()->id),
-            ],
-
             'profile_image' => [
-                'sometimes',
+                'nullable',
                 'image',
                 'mimes:jpg,jpeg,png',
                 'max:2048',
@@ -59,10 +51,6 @@ class UpdateUserRequest extends FormRequest
 
             'phone.regex' => 'Phone must be valid Egyptian number.',
             'phone.unique' => 'This phone number already exists.',
-
-            'university_id.min' => 'University ID must be at least 6 characters.',
-            'university_id.max' => 'University ID must not exceed 20 characters.',
-            'university_id.unique' => 'This university ID already exists.',
 
             'profile_image.image' => 'Profile image must be an image.',
             'profile_image.mimes' => 'Image must be jpg, jpeg or png.',

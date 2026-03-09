@@ -16,6 +16,8 @@ use App\Http\Controllers\Student\StudentCourseController;
 use App\Http\Controllers\Student\StudentQuizController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Student\StudentLectureController;
+use App\Http\Controllers\Student\StudentAssignmentController;
+use App\Http\Controllers\Instructor\InstructorAssignmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -70,11 +72,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('/lectures/{lecture}/assignments', [AssignmentController::class, 'store']);
-
-});
-Route::middleware('auth:sanctum')->group(function () {
-
     Route::post('/courses/{course}/certificate', [CourseCertificateController::class, 'store']);
 });
 
@@ -113,4 +110,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/quiz/{quizId}', [StudentQuizController::class, 'show']);
     Route::post('/quiz/{quizId}/start', [StudentQuizController::class, 'start']);
     Route::post('/quiz/attempt/{attemptId}/submit', [StudentQuizController::class, 'submit']);
+});
+
+
+
+Route::middleware('auth:sanctum')->group(function(){
+
+    // student
+    Route::get('/assignment/{id}',[StudentAssignmentController::class,'show']);
+    Route::post('/assignment/{id}/submit',[StudentAssignmentController::class,'submit']);
+
+    // instructor
+    Route::post('/lectures/{lecture}/assignments', [AssignmentController::class, 'store']);
+    Route::get('/assignment/{id}/submissions',[InstructorAssignmentController::class,'submissions']);
+    Route::post('/submission/{id}/grade',[InstructorAssignmentController::class,'grade']);
 });
