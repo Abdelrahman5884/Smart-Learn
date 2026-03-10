@@ -14,10 +14,13 @@ use App\Http\Controllers\Instructor\LectureController;
 use App\Http\Controllers\Instructor\QuizController;
 use App\Http\Controllers\Student\StudentCourseController;
 use App\Http\Controllers\Student\StudentQuizController;
+use App\Http\Controllers\Student\CertificateController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Student\StudentLectureController;
 use App\Http\Controllers\Student\StudentAssignmentController;
 use App\Http\Controllers\Instructor\InstructorAssignmentController;
+use App\Http\Controllers\Student\ChatBotController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -112,8 +115,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/quiz/attempt/{attemptId}/submit', [StudentQuizController::class, 'submit']);
 });
 
-
-
 Route::middleware('auth:sanctum')->group(function(){
 
     // student
@@ -124,4 +125,21 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/lectures/{lecture}/assignments', [AssignmentController::class, 'store']);
     Route::get('/assignment/{id}/submissions',[InstructorAssignmentController::class,'submissions']);
     Route::post('/submission/{id}/grade',[InstructorAssignmentController::class,'grade']);
+});
+
+Route::middleware('auth:sanctum')->group(function(){
+
+    Route::get('/certificates', [CertificateController::class,'myCertificates']);
+    Route::post('/student/{courseId}/certificate', [CertificateController::class,'issue']);
+
+});
+
+
+Route::middleware('auth:sanctum')->group(function(){
+
+    Route::post('/chat/start',[ChatBotController::class,'start']);
+    Route::post('/chat/{conversationId}/send',[ChatBotController::class,'send']);
+    Route::get('/chat/{conversationId}/messages',[ChatBotController::class,'messages']);
+    Route::get('/chat/conversations',[ChatBotController::class,'conversations']);
+    Route::delete('/chat/{conversationId}',[ChatBotController::class,'delete']);
 });

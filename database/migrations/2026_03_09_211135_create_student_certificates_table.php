@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('student_certificates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('day_of_week');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->string('location')->nullable();
+            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+            $table->string('certificate_number')->unique();
+            $table->timestamp('issued_at');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('student_certificates');
     }
 };
