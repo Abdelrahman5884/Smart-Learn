@@ -39,17 +39,17 @@ class QuizController extends Controller
             'order' => QuizQuestion::where('quiz_id', $quizId)->count() + 1,
         ]);
 
-        if ($request->type !== 'short_answer') {
+        if ($request->type !== 'short_answer' && $request->has('options')) {
 
-            foreach ($request->options as $option) {
+    foreach ($request->options as $option) {
 
-                QuizOption::create([
-                    'question_id' => $question->id,
-                    'option_text' => $option['option_text'],
-                    'is_correct' => $option['is_correct'],
-                ]);
-            }
-        }
+        QuizOption::create([
+            'question_id' => $question->id,
+            'option_text' => $option['option_text'],
+            'is_correct' => $option['is_correct'],
+        ]);
+    }
+}
 
         return response()->json([
             'success' => true,
