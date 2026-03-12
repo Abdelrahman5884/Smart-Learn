@@ -4,16 +4,17 @@ WORKDIR /app
 
 COPY . .
 
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libpq-dev
+RUN apt-get update && apt-get install -y git unzip libpq-dev
 
 RUN docker-php-ext-install pdo pdo_mysql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install
+
+RUN php artisan key:generate
+
+RUN php artisan migrate --force
 
 EXPOSE 10000
 
