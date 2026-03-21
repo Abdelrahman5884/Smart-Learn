@@ -15,3 +15,11 @@ RUN composer install --no-dev --optimize-autoloader
 EXPOSE 8080
 
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+RUN composer install
+
+RUN php artisan config:clear
+RUN php artisan cache:clear
+RUN php artisan config:cache
+
+RUN php artisan key:generate
+RUN php artisan migrate --force
