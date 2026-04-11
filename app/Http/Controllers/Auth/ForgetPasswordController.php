@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\ForgetPasswordRequest;
 use App\Mail\SendOtpMail;
 use App\Models\PasswordOtp;
 use Illuminate\Support\Facades\Mail;
+use App\Services\BrevoMailService;
 
 class ForgetPasswordController extends Controller
 {
@@ -22,7 +23,10 @@ class ForgetPasswordController extends Controller
             ]
         );
 
-        Mail::to($request->email)->send(new SendOtpMail($otp));
+
+$mailService = new BrevoMailService();
+
+$mailService->sendOtp($request->email, $otp);
 
         return response()->json([
             'success' => true,

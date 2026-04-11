@@ -26,7 +26,6 @@ class User extends Authenticatable
         'university_id',
         'phone',
         'profile_image',
-
     ];
 
     /**
@@ -62,10 +61,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Course::class)->withPivot(['status', 'enrolled_at'])->withTimestamps();
     }
 
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
-    }
        public function lectures()
    {
     return $this->hasMany(CourseLectures::class);
