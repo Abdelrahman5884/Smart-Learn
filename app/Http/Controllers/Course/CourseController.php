@@ -72,7 +72,10 @@ class CourseController extends Controller
     //  My Courses
     public function myCourses(Request $request)
     {
-        $courses = Course::where('instructor_id', $request->user()->id)->get();
+        $courses = Course::where('instructor_id', $request->user()->id)
+            ->with('instructor')
+            ->withCount(['lectures', 'quizzes', 'students'])
+            ->get();
 
         return new CourseResponse($courses);
     }
@@ -80,7 +83,10 @@ class CourseController extends Controller
     //  Public Courses
     public function index()
     {
-        $courses = Course::where('status', 'active')->get();
+        $courses = Course::where('status', 'active')
+            ->with('instructor')
+            ->withCount('lectures')
+            ->get();
 
         return new CourseResponse($courses);
     }
@@ -88,6 +94,11 @@ class CourseController extends Controller
     //  Show Course
     public function show(Course $course)
     {
+        $course->load(['lectures' => function ($q) {
+            $q->orderBy('order');
+        }, 'quizzes.questions', 'instructor']);
+        $course->loadCount(['lectures', 'students']);
+
         return new CourseResponse($course);
     }
 }
