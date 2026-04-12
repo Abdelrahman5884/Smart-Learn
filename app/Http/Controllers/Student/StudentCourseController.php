@@ -11,7 +11,10 @@ class StudentCourseController extends Controller
 {
     public function index(): JsonResponse
     {
-        $courses = Course::where('status', 'active')->get();
+        $courses = Course::where('status', 'active')
+            ->with('instructor')
+            ->withCount('lectures')
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -48,12 +51,12 @@ class StudentCourseController extends Controller
         }
 
         $user->enrolledCourses()->attach($course->id, [
-            'status' => 'pending',
+            'status' => 'approved',
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Enrollment request sent successfully.',
+            'message' => 'تم الانضمام للمقرر بنجاح!',
         ]);
     }
 
@@ -63,7 +66,27 @@ class StudentCourseController extends Controller
 
         $courses = $user->enrolledCourses()
             ->wherePivot('status', 'approved')
+            ->with('instructor')
+            ->withCount('lectures')
             ->get();
+
+        // Add progress for each course
+        $courses->transform(function ($course) use ($user) {
+            $totalLectures = $course->lectures_count;
+            $lectureIds = $course->lectures()->pluck('id');
+            $completedLectures = $user->completedLectures()
+                ->whereIn('course_lectures.id', $lectureIds)
+                ->wherePivot('is_completed', true)
+                ->count();
+
+            $course->progress = $totalLectures > 0
+                ? round(($completedLectures / $totalLectures) * 100)
+                : 0;
+            $course->completed_lectures = $completedLectures;
+            $course->instructor_name = $course->instructor->name ?? null;
+
+            return $course;
+        });
 
         return response()->json([
             'success' => true,
@@ -75,21 +98,46 @@ class StudentCourseController extends Controller
     {
         $user = $request->user();
 
-        $isApproved = $user->enrolledCourses()
+        $enrollment = $user->enrolledCourses()
             ->where('course_id', $course->id)
-            ->wherePivot('status', 'approved')
-            ->exists();
+            ->first();
 
-        if (! $isApproved) {
+        if (! $enrollment || $enrollment->pivot->status !== 'approved') {
+            $status = $enrollment ? $enrollment->pivot->status : null;
             return response()->json([
                 'success' => false,
-                'message' => 'You are not allowed to access this course.',
+                'message' => $status === 'pending'
+                    ? 'طلب انضمامك قيد المراجعة من المحاضر.'
+                    : 'You are not allowed to access this course.',
+                'enrollment_status' => $status,
             ], 403);
         }
 
+        $course->load(['lectures' => function ($q) {
+            $q->orderBy('order');
+        }, 'quizzes.questions', 'instructor']);
+
+        // Calculate progress
+        $totalLectures = $course->lectures->count();
+        $lectureIds = $course->lectures->pluck('id');
+        $completedLectures = $user->completedLectures()
+            ->whereIn('course_lectures.id', $lectureIds)
+            ->wherePivot('is_completed', true)
+            ->count();
+
+        $progress = $totalLectures > 0
+            ? round(($completedLectures / $totalLectures) * 100)
+            : 0;
+
+        $courseData = $course->toArray();
+        $courseData['progress'] = $progress;
+        $courseData['completed_lectures'] = $completedLectures;
+        $courseData['total_lectures'] = $totalLectures;
+        $courseData['instructor_name'] = $course->instructor->name ?? null;
+
         return response()->json([
             'success' => true,
-            'data' => $course,
+            'data' => $courseData,
         ]);
     }
 }
