@@ -23,28 +23,35 @@ class UserController extends Controller
       // Get update
 public function update(UpdateUserRequest $request)
 {
+    
     $user = $request->user();
 
     $data = $request->validated();
 
     if ($request->hasFile('profile_image')) {
 
-        if ($user->profile_image) {
-            Storage::disk('public')->delete($user->profile_image);
-        }
-
-        $data['profile_image'] = $request
-            ->file('profile_image')
-            ->store('users', 'public');
+    if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+        Storage::disk('public')->delete($user->profile_image);
     }
 
-    $user->update($data);
+    $path = $request->file('profile_image')->store('users', 'public');
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Profile updated successfully.',
-        'data' => $user->fresh(),
-    ]);
+    $data['profile_image'] = $path;
+}
+
+$user->update($data);
+
+$user = $user->fresh();
+
+$user->profile_image = $user->profile_image
+    ? asset('storage/' . $user->profile_image)
+    : null;
+
+return response()->json([
+    'success' => true,
+    'message' => 'Profile updated successfully.',
+    'data' => $user,
+]);
 }
 
     // Change Password
